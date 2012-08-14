@@ -694,6 +694,7 @@ ru:
   pending_payments: "Незавершённые платежи"
   permalink: "Постоянная ссылка"
   phone: "Телефон"
+  pimport: "Импорт товаров"
   place_order: "Разместить заказ"
   please_create_user: "Пожалуйста, создайте учётную запись."
   powered_by: "Работает на"

@@ -6,7 +6,7 @@ Soft72Local::Application.routes.draw do
   #
   # We ask that you don't use the :as option here, as Spree relies on it being the default of "spree"
   mount Spree::Core::Engine, :at => '/'
-          # The priority is based upon order of creation:
+  # The priority is based upon order of creation:
   # first created -> highest priority.
 
   # Sample of regular route:
@@ -62,4 +62,11 @@ Soft72Local::Application.routes.draw do
   # This is a legacy wild controller route that's not recommended for RESTful applications.
   # Note: This route will make all actions in every controller accessible via GET requests.
   # match ':controller(/:action(/:id))(.:format)'
+
+  Spree::Core::Engine.routes.prepend do
+  	namespace :admin do
+  		match '/pimport', :to => 'pimport#index', :as => :pimport
+  	end
+	end
+
 end
