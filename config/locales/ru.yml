@@ -1063,6 +1063,7 @@ ru:
   update_password: "Обновить мой пароль и войти"
   updated_successfully: "Запись успешна изменена"
   updating: "Обновление"
+  upload: "Загрузить"
   usage_limit: "Максимальное количество использований"
   use_as_shipping_address: "Использовать как адрес доставки"
   use_billing_address: "Использовать платёжный адрес"

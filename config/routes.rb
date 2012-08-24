@@ -65,7 +65,7 @@ Soft72Local::Application.routes.draw do
 
   Spree::Core::Engine.routes.prepend do
   	namespace :admin do
-  		match '/pimport', :to => 'pimport#index', :as => :pimport
+  		match '/pimport(/:action)', :to => 'pimport', :as => :pimport
   	end
 	end
 

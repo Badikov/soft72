@@ -9,6 +9,11 @@ merchandise.encoding = "utf-8"
 categories = merchandise.xpath("//category")
 products = merchandise.xpath("//program")
 
-categories.each do |category|
-	puts category.content()
+# products.each do |product|
+# 	puts product.children
+# end
+
+products[0].children.each do |f|
+	puts '------------------------'
+	puts f.content
 end

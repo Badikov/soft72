@@ -1,0 +1,13 @@
+<!-- <div class='toolbar'>
+	<%= button_link_to t(:new_order), new_admin_order_url, :icon => 'add', :id => 'admin_new_order' %>
+</div>
+ -->
+<h1><%= t(:pimport) %></h1>
+
+<%= form_tag({:action => :upload}, :multipart => true) do %>
+	<%= file_field_tag 'pimport_file' %>
+	<p class="form-buttons" data-hook="buttons">
+		<%= button t(:upload) %>
+	</p>
+<% end %>
+
