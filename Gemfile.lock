@@ -113,7 +113,7 @@ GEM
       activesupport (>= 2.3.2)
       cocaine (>= 0.0.2)
       mime-types
-    pg (0.14.1)
+    pg (0.12.2)
     polyamorous (0.5.0)
       activerecord (~> 3.0)
     polyglot (0.3.3)
@@ -238,7 +238,7 @@ PLATFORMS
 DEPENDENCIES
   coffee-rails (~> 3.2.1)
   jquery-rails
-  pg
+  pg (= 0.12.2)
   rails (= 3.2.7)
   sass-rails (~> 3.2.3)
   spree (= 1.1.3)
