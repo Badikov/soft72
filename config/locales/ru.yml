@@ -378,6 +378,9 @@ ru:
   depth: "Глубина"
   description: "Описание"
   destroy: "Удалить"
+  devise:
+    failure:
+      invalid: "Логин или пароль введены не верно"
   didnt_receive_confirmation_instructions: "Не получили инструкций по подтверждению?"
   didnt_receive_unlock_instructions: "Не получили инструкций по разблокированию?"
   discount_amount: "Сумма скидки"
