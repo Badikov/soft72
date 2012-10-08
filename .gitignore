@@ -8,10 +8,6 @@ capybara-*.html
 /log/*
 /tmp/*
 /public/system/*
-/coverage/
 /spec/tmp/*
-**.orig
-rerun.txt
-pickle-email-*.html
-/shop.xml
-/README.rdoc
+/.idea/*
+/public/spree/*

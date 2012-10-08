@@ -1,7 +1,32 @@
 module Spree
 	module Admin
+
+		require "happymapper"
+
+		#HappyMapper Classes
+		class Category
+			include HappyMapper
+
+			tag 'category'
+			content :name, String
+			attribute :id, Integer
+			attribute :parentId, Integer
+		end
+
+		class Program
+			include HappyMapper
+
+			tag 'program'
+			attribute :id, Integer
+			element :name, String
+			element :image, String
+			element :full_desc, String
+			element :short_desc, String
+			element :vendor, String
+		end
+
 		class PimportController < Spree::Admin::BaseController
-			require 'nokogiri'
+			require 'open-uri'
 
 			def index
 				
@@ -18,52 +43,33 @@ module Spree
 					end
 
 					# Uploaded file parsing
-					f = File.open(uploaded_file_path)
-					merchandise = Nokogiri::XML(f)
-					f.close
+					xml_base = File.open("shop.xml").read
 
-					merchandise.encoding = "utf-8"
+					categories = Category.parse(xml_base)
+					programs = Program.parse(xml_base)
 
-					categories = merchandise.xpath("//category")
-					# products = merchandise.xpath("//program")
+					programs.each do |program|
+						p = Product.find_or_initialize_by_id(program.id)
+						p.name = program.name
+						p.price = 100
+						p.available_on = Time.now
+						p.save
 
-          categories.each do |category|
-            if category["parentId"] === "0"
-              catalog_array = Hash[category["id"]], Array.[](category.content)
-            else
-              current_category = catalog_array[category["parentId"]]
-              current_category = current_category.push(category["id"], category.content)
-            end
-          end
+						image_file = open(program.image)
 
-					#categories.each do |category|
-					#	if category['parentId'] == '0'
-					#		taxonomy = Taxonomy.find_or_initialize_by_id(category['id'])
-					#		taxonomy.id, taxonomy.name = category['id'], category.content
-					#		taxonomy.save
-					#	else
-					#		taxon = Taxon.find_or_initialize_by_id(category['id'])
-					#		if parent_id != category['parentId']
-					#			parent_id = category['parentId']
-					#			taxon_position = 0
-					#		end
-					#		taxon.parent_id = category['parentId']
-					#		taxon_position = taxon_position + 1
-					#		taxon.id, taxon.position, taxon.taxonomy_id, taxon.name = category['id'], taxon_position, category['parentId'], category.content
-           #   taxon.set_permalink
-					#		taxon.save
-					#	end
-					#end
+						def
+							image_file.original_filename
+							base_uri.path.split('/').last
+						end
 
-					# products.each do |product| do
-					# 	taxon = Taxon.find_or_initialize_by_id(product['id'])
-					# 	taxon.id, taxon.name = product['id'], product.content
-					# 	taxon.save
-					# end
+						image = Image.find_or_initialize_by_attachment_file_name(image_file.original_filename)
+						image.attachment = image_file
+						image.viewable = p
+						@image = image
+						p.images << image if image.save
+					end
 
 				end
-
-        @catalog_array = catalog_array
 
 			end
 
