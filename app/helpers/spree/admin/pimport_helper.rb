@@ -1,6 +1,6 @@
 module Spree
   module Admin
-    module ProductsImportHelper
+    module PimportHelper
     end
   end
 end

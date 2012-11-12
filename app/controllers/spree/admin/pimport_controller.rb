@@ -1,38 +1,15 @@
 module Spree
 	module Admin
 
-		require "happymapper"
-
-		#HappyMapper Classes
-		class Category
-			include HappyMapper
-
-			tag 'category'
-			content :name, String
-			attribute :id, Integer
-			attribute :parentId, Integer
-		end
-
-		class Program
-			include HappyMapper
-
-			tag 'program'
-			attribute :id, Integer
-			element :name, String
-			element :image, String
-			element :full_desc, String
-			element :short_desc, String
-			element :vendor, String
-		end
-
 		class PimportController < Spree::Admin::BaseController
-			require 'open-uri'
 
 			def index
 				
 			end
 
 			def upload
+				require 'open-uri'
+				require "pimport/allsoft"
 				
 				# File uploading
         uploaded_io = params[:pimport_file]
@@ -43,30 +20,52 @@ module Spree
 					end
 
 					# Uploaded file parsing
-					xml_base = File.open("shop.xml").read
+					xml_base = File.open(uploaded_file_path).read
+					shop = Shop.parse(xml_base, single: true)
 
-					categories = Category.parse(xml_base)
-					programs = Program.parse(xml_base)
+					# Taxons
+					# If parent_id == 0 then it's a main category (Taxonomy) of product
+					@taxons = {}
+					shop.categories.each do |category|
+						if category.parent_id == 0
+							Taxonomy.find_or_create_by_id_and_name(category.id, category.name)
+						end
+						@taxons[category.id] = category
+					end
 
-					programs.each do |program|
+					# Programs
+					#
+					shop.programs.each do |program|
 						p = Product.find_or_initialize_by_id(program.id)
 						p.name = program.name
 						p.price = 100
 						p.available_on = Time.now
-						p.save
 
-						image_file = open(program.image)
-
-						def
-							image_file.original_filename
-							base_uri.path.split('/').last
+						def taxon_parent(taxon)
+							t = Taxonomy.find_by_id(taxon)
+							if t
+								Taxon.find_by_name(t.name).id
+							end
 						end
 
-						image = Image.find_or_initialize_by_attachment_file_name(image_file.original_filename)
-						image.attachment = image_file
-						image.viewable = p
-						@image = image
-						p.images << image if image.save
+						p.taxons << Taxon.find_or_create_by_id_and_name_and_parent_id_and_taxonomy_id(
+								@taxons[program.category_id].id,
+								@taxons[program.category_id].name,
+								taxon_parent(@taxons[program.category_id].parent_id),
+								@taxons[program.category_id].parent_id)
+
+						p.save
+
+						#image_file = open(program.image)
+						#def
+						#image_file.original_filename
+						#	base_uri.path.split('/').last
+						#end
+						#image = Image.find_or_initialize_by_attachment_file_name(image_file.original_filename)
+						#image.attachment = image_file
+						#image.viewable = p
+						#@image = image
+						#p.images << image if image.save
 					end
 
 				end

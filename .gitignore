@@ -11,3 +11,4 @@ capybara-*.html
 /spec/tmp/*
 /.idea/*
 /public/spree/*
+/db/*.sqlite3
