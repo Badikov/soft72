@@ -35,26 +35,30 @@ module Spree
 
 					# Programs
 					#
+					option_type = OptionType.find_or_create_by_name_and_presentation('version', 'Version')
 					shop.programs.each do |program|
-						p = Product.find_or_initialize_by_id(program.id)
-						p.name = program.name
-						p.price = 100
-						p.available_on = Time.now
-
-						def taxon_parent(taxon)
-							t = Taxonomy.find_by_id(taxon)
-							if t
-								Taxon.find_by_name(t.name).id
+						program.versions.each do |version|
+							if version == program.versions.first
+								@p = Product.find_or_initialize_by_id(version.id)
+								@p.name = version.fullname
+								@p.price = version.prices[0].value
+								@p.available_on = Time.now
+								@p.taxons << Taxon.find_or_create_by_id_and_name_and_parent_id_and_taxonomy_id(
+										@taxons[program.category_id].id,
+										@taxons[program.category_id].name,
+										@taxons[program.category_id].parent_id,
+										@taxons[program.category_id].parent_id)
+								@p.save
+							else
+								version.prices.each do |variant|
+									v = Variant.find_or_create_by_id_and_product_id_and_price(id: variant.id, product_id: @p.id, price: variant.value)
+									option_values = OptionValue.find_or_initialize_by_name_and_presentation(:name => variant.name.to_url, :presentation => variant.name)
+									option_values.option_type = option_type
+									option_values.save
+									v.option_values << option_values
+								end
 							end
 						end
-
-						p.taxons << Taxon.find_or_create_by_id_and_name_and_parent_id_and_taxonomy_id(
-								@taxons[program.category_id].id,
-								@taxons[program.category_id].name,
-								taxon_parent(@taxons[program.category_id].parent_id),
-								@taxons[program.category_id].parent_id)
-
-						p.save
 
 						#image_file = open(program.image)
 						#def

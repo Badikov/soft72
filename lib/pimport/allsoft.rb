@@ -3,6 +3,7 @@ require "happymapper"
 class Price
 	include HappyMapper
 	tag 'price'
+	attribute :id, String, tag: 'id'
 	element :name, String, tag: 'name'
 	element :range_name, String, tag: 'range_name'
 	element :value, String, tag: 'value'
@@ -10,19 +11,20 @@ end
 
 class Version
 	include HappyMapper
-	tag 'versions'
+	tag 'version'
 	has_many :prices, Price, tag: 'price'
+	attribute :id, Integer, tag: 'id'
 	element :name, String, tag: 'name'
 	element :fullname, String, tag: 'fullname'
 	element :description, String, tag: 'description'
-	element :license_type, String, tag: 'lecinse_type'
+	element :license_type, String, tag: 'license_type'
 	element :os, String, tag: 'os'
 end
 
 class Program
 	include HappyMapper
 	tag 'program'
-	has_many :versions, Version, tag: 'versions'
+	has_many :versions, Version, tag: 'version'
 	attribute :id, Integer, tag: 'id'
 	element :category_id, Integer, tag: 'categoryId', xpath: 'categories'
 	element :name, String, tag: 'name'
@@ -49,4 +51,4 @@ end
 
 #xml = File.open('./shop.xml').read
 #shop = Shop.parse(xml, single: true)
-#shop.programs[0].category_id
+#shop.programs[0].versions[0].prices[0].id
