@@ -23,41 +23,73 @@ module Spree
 					xml_base = File.open(uploaded_file_path).read
 					shop = Shop.parse(xml_base, single: true)
 
-					# Taxons
-					# If parent_id == 0 then it's a main category (Taxonomy) of product
+					# Making taxonomy
+					#
 					@taxons = {}
 					shop.categories.each do |category|
 						if category.parent_id == 0
-							Taxonomy.find_or_create_by_id_and_name(category.id, category.name)
+							Taxonomy.where(
+									id: category.id,
+									name: category.name
+							).first_or_create
+						else
+							@taxons[category.id] = Taxon.where(
+									name: category.name,
+									parent_id: category.parent_id,
+									taxonomy_id: category.parent_id
+							).first_or_initialize
+							@taxons[category.id].id = category.id
+							@taxons[category.id].save
 						end
-						@taxons[category.id] = category
 					end
+
+					option_type = OptionType.where(
+							name: 'version',
+							presentation: 'Version'
+					).first_or_create
 
 					# Programs
 					#
-					option_type = OptionType.find_or_create_by_name_and_presentation('version', 'Version')
 					shop.programs.each do |program|
-						program.versions.each do |version|
-							if version == program.versions.first
-								@p = Product.find_or_initialize_by_id(version.id)
+						if program.versions.count > 1
+							program.versions.each do |version|
+								@p = Product.where(id: version.id).first_or_initialize
 								@p.name = version.fullname
 								@p.price = version.prices[0].value
 								@p.available_on = Time.now
-								@p.taxons << Taxon.find_or_create_by_id_and_name_and_parent_id_and_taxonomy_id(
-										@taxons[program.category_id].id,
-										@taxons[program.category_id].name,
-										@taxons[program.category_id].parent_id,
-										@taxons[program.category_id].parent_id)
+								if @p.taxons.where(
+										name: program.name,
+										parent_id: program.category_id,
+										taxonomy_id: @taxons[program.category_id].parent_id
+								).empty?
+									@p.taxons << Taxon.where(
+											name: program.name,
+											parent_id: program.category_id,
+											taxonomy_id: @taxons[program.category_id].parent_id
+									).first_or_initialize
+								end
 								@p.save
-							else
 								version.prices.each do |variant|
-									v = Variant.find_or_create_by_id_and_product_id_and_price(id: variant.id, product_id: @p.id, price: variant.value)
-									option_values = OptionValue.find_or_initialize_by_name_and_presentation(:name => variant.name.to_url, :presentation => variant.name)
+									v = Variant.where(
+											product_id: @p.id,
+											price: variant.value.to_f
+									).first_or_create
+									option_values = OptionValue.where(
+											name: variant.name.to_url,
+											presentation: variant.name
+									).first_or_create
 									option_values.option_type = option_type
 									option_values.save
-									v.option_values << option_values
+									if v.option_values.where(
+											name: variant.name.to_url,
+											presentation: variant.name
+									).empty?
+										v.option_values << option_values
+									end
 								end
 							end
+						else
+
 						end
 
 						#image_file = open(program.image)
