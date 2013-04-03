@@ -42,3 +42,5 @@ gem 'spree', '1.1.5'
 gem 'spree_usa_epay'
 gem 'spree_skrill'
 gem 'spree_i18n', :git => 'git://github.com/spree/spree_i18n.git'
+
+gem 'newrelic_rpm'
