@@ -48,7 +48,3 @@ class Shop
 	has_many :programs, Program, tag: 'program'
 	has_many :categories, Category, tag: 'category'
 end
-
-#xml = File.open('./shop.xml').read
-#shop = Shop.parse(xml, single: true)
-#shop.programs[0].versions[0].prices[0].id

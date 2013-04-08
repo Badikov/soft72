@@ -1,7 +1,8 @@
 <h1><%= t('pimport') %></h1>
+
 <%= form_tag({ action: :upload }, multipart: true) do %>
 	<%= file_field_tag 'pimport_file' %>
 	<p class="form-buttons" data-hook="buttons">
-		<%= button t(:upload) %>
+		<%= button t(:upload), '', :post, { confirm: t(:cleardb_confirm) } %>
 	</p>
 <% end %>

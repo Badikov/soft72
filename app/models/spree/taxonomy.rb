@@ -15,7 +15,7 @@ module Spree
 			if root
 				root.update_column(:name, name)
 			else
-				# Added id to match allsoft database
+				# Added :id to match allsoft's database
 				self.root = Taxon.create!({ :id => id, :taxonomy_id => id, :name => name }, :without_protection => true)
 			end
 		end
