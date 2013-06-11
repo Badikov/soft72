@@ -103,18 +103,18 @@ module Spree
 									end
 								end
 							end
-						end
 
-						image_file = open(program.image)
-						def
-						image_file.original_filename
-							base_uri.path.split('/').last
+							image_file = open(program.image)
+							def
+							image_file.original_filename
+								base_uri.path.split('/').last
+							end
+							image = Image.find_or_initialize_by_attachment_file_name(image_file.original_filename)
+							image.attachment = image_file
+							image.viewable = p
+							@image = image
+							p.images << image if image.save
 						end
-						image = Image.find_or_initialize_by_attachment_file_name(image_file.original_filename)
-						image.attachment = image_file
-						image.viewable = p
-						@image = image
-						p.images << image if image.save
 					end
 
 				end
