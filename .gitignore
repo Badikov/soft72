@@ -13,4 +13,6 @@ capybara-*.html
 /public/spree/*
 /db/*.sqlite3
 
-/public/spree/
+/public/spree/*
+/public/uploads/*
+*.xml
