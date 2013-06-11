@@ -8,6 +8,8 @@
 Spree.config do |config|
   # Example:
   # Uncomment to override the default site name.
-  # config.site_name = "Spree Demo Site"
+  config.site_name = "Soft72.biz"
   config.default_locale = :ru
+  config.logo = "logo.png"
+  config.default_country_id = 168
 end

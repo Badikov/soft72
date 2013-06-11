@@ -59,19 +59,26 @@ GEM
       nokogiri (>= 1.4.4)
       uuidtools (~> 2.1)
     bcrypt-ruby (3.0.1)
+    better_errors (0.9.0)
+      coderay (>= 1.0.0)
+      erubis (>= 2.6.6)
+    binding_of_caller (0.7.1)
+      debug_inspector (>= 0.0.1)
     builder (3.0.4)
     cancan (1.6.7)
     climate_control (0.0.3)
       activesupport (>= 3.0)
     cocaine (0.5.1)
       climate_control (>= 0.0.3, < 1.0)
+    coderay (1.0.9)
     coffee-rails (3.2.2)
       coffee-script (>= 2.2.0)
       railties (~> 3.2.0)
     coffee-script (2.2.0)
       coffee-script-source
       execjs
-    coffee-script-source (1.4.0)
+    coffee-script-source (1.6.2)
+    debug_inspector (0.0.2)
     deface (0.9.1)
       nokogiri (~> 1.5.0)
       rails (~> 3.1)
@@ -117,9 +124,8 @@ GEM
     nested_set (1.7.0)
       activerecord (>= 3.0.0)
       railties (>= 3.0.0)
-    newrelic_rpm (3.6.0.78)
-    nokogiri (1.5.6)
-    nokogiri-happymapper (0.5.6)
+    nokogiri (1.5.9)
+    nokogiri-happymapper (0.5.7)
       nokogiri (~> 1.5)
     nori (2.0.3)
     orm_adapter (0.0.7)
@@ -169,7 +175,7 @@ GEM
       json (~> 1.4)
     russian (0.6.0)
       i18n (>= 0.5.0)
-    sass (3.2.5)
+    sass (3.2.9)
     sass-rails (3.2.6)
       railties (~> 3.2.0)
       sass (>= 3.1.10)
@@ -243,7 +249,7 @@ GEM
       polyglot
       polyglot (>= 0.3.1)
     tzinfo (0.3.35)
-    uglifier (1.3.0)
+    uglifier (2.1.1)
       execjs (>= 0.3.0)
       multi_json (~> 1.0, >= 1.0.2)
     unicorn (4.6.2)
@@ -261,9 +267,10 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  better_errors
+  binding_of_caller
   coffee-rails (~> 3.2.1)
   jquery-rails
-  newrelic_rpm
   nokogiri-happymapper
   pg (= 0.12.2)
   rails (= 3.2.12)

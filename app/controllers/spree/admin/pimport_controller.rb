@@ -35,19 +35,16 @@ module Spree
 					taxons = {}
 					shop.categories.each do |category|
 						if category.parent_id == 0
-							taxonomy = Taxonomy.new(
+							taxonomy = Taxonomy.create(
 									name: category.name
 							)
-							taxonomy.id = category.id
-							taxonomy.save
+							taxons[category.id] = taxonomy.root
 						else
-							taxons[category.id] = Taxon.new(
+							taxons[category.id] = Taxon.create(
 									name: category.name,
-									parent_id: category.parent_id,
-									taxonomy_id: category.parent_id
+									parent_id: taxons[category.parent_id].id,
+									taxonomy_id: taxons[category.parent_id].id
 							)
-							taxons[category.id].id = category.id
-							taxons[category.id].save
 						end
 					end
 
@@ -59,30 +56,39 @@ module Spree
 
 					# Programs
 					shop.programs.each do |program|
-						if program.versions.count > 1
-							program.versions.each do |version|
-								p = Product.new(id: version.id)
-								p.name = version.fullname
-								p.price = version.prices[0].value
-								p.available_on = Time.now
-								if p.taxons.where(
+
+						# Make Taxon if more than 1 Variants
+						if program.versions.size > 1
+							program_taxons = Taxon.create(
+									name: program.name,
+									parent_id: taxons[program.category_id].id,
+									taxonomy_id: taxons[program.category_id].id
+							)
+						end
+
+						program.versions.each do |version|
+							p = Product.create(
+								name: version.fullname,
+								price: version.prices[0].value.to_f,
+								available_on: Time.now
+							)
+							if p.taxons.where(
+									name: program.name,
+									parent_id: taxons[program.category_id].id,
+									taxonomy_id: taxons[program.category_id].id
+							).empty?
+								p.taxons << Taxon.new(
 										name: program.name,
-										parent_id: program.category_id,
-										taxonomy_id: taxons[program.category_id].parent_id
-								).empty?
-									p.taxons << Taxon.new(
-											name: program.name,
-											parent_id: program.category_id,
-											taxonomy_id: taxons[program.category_id].parent_id
-									)
-								end
-								p.save
-								version.prices.each do |variant|
-									v = Variant.new(
-											product_id: p.id,
-											price: variant.value.to_f
-									)
-									v.save
+										parent_id: taxons[program.category_id].id,
+										taxonomy_id: taxons[program.category_id].id
+								)
+							end
+							version.prices.each do |variant|
+								v = Variant.create(
+										product_id: p.id,
+										price: variant.value.to_f
+								)
+								unless variant.name.nil?
 									option_value = OptionValue.new(
 											name: variant.name.to_url,
 											presentation: variant.name
@@ -97,20 +103,18 @@ module Spree
 									end
 								end
 							end
-						else
-
 						end
 
-						#image_file = open(program.image)
-						#def
-						#image_file.original_filename
-						#	base_uri.path.split('/').last
-						#end
-						#image = Image.find_or_initialize_by_attachment_file_name(image_file.original_filename)
-						#image.attachment = image_file
-						#image.viewable = p
-						#@image = image
-						#p.images << image if image.save
+						image_file = open(program.image)
+						def
+						image_file.original_filename
+							base_uri.path.split('/').last
+						end
+						image = Image.find_or_initialize_by_attachment_file_name(image_file.original_filename)
+						image.attachment = image_file
+						image.viewable = p
+						@image = image
+						p.images << image if image.save
 					end
 
 				end
