@@ -12,6 +12,7 @@ gem 'pg', '0.12.2'
 
 gem 'jquery-rails'
 gem 'nokogiri-happymapper'
+gem 'aws-sdk'
 
 # To use ActiveModel has_secure_password
 # gem 'bcrypt-ruby', '~> 3.0.0'
