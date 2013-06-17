@@ -1,30 +1,22 @@
 module Spree
-	class Pimport < ActiveRecord::Base
+	class Pimport
+		include AbstractController::Translation
 
-		attr_accessor :xml_db, :xml_db_file_name
-		has_attached_file :xml_db
 
-		def attributes_from_column_definition
-			[]
-		end
-
-		def self.columns
-			@columns ||= []
-		end
-
-		def initialize
+		def initialize(obj)
 			Taxonomy.delete_all
 			Taxon.delete_all
 			Product.delete_all
 			Variant.delete_all
 			OptionType.delete_all
 			OptionValue.delete_all
+			parse_db(obj)
 		end
 
-		def parse_db
+		def parse_db(obj)
 			require "pimport/allsoft"
 
-			shop = Shop.parse(xml_base, single: true)
+			shop = Shop.parse(obj.read, single: true)
 
 			# Making taxonomy
 			taxons = {}
@@ -99,16 +91,16 @@ module Spree
 						end
 					end
 
-					image_file = open(program.image)
-					def
-					image_file.original_filename
-						base_uri.path.split('/').last
-					end
-					image = Image.find_or_initialize_by_attachment_file_name(image_file.original_filename)
-					image.attachment = image_file
-					image.viewable = p
-					@image = image
-					p.images << image if image.save
+					#image_file = open(program.image)
+					#def
+					#image_file.original_filename
+					#	base_uri.path.split('/').last
+					#end
+					#image = Image.find_or_initialize_by_attachment_file_name(image_file.original_filename)
+					#image.attachment = image_file
+					#image.viewable = p
+					#@image = image
+					#p.images << image if image.save
 				end
 			end
 		end
