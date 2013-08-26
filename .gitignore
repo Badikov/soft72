@@ -7,12 +7,15 @@ capybara-*.html
 /vendor/bundle
 /log/*
 /tmp/*
-/public/system/*
 /spec/tmp/*
 /.idea/*
-/public/spree/*
-/db/*.sqlite3
 
+/db/*.sqlite3
+/db/public.sql
+
+/public/system/*
 /public/spree/*
 /public/uploads/*
+/public/assets/*
+
 *.xml

@@ -1,18 +1,25 @@
 source 'https://rubygems.org'
 
 gem 'rails', '3.2.12'
-gem 'unicorn'
-
-gem 'russian'
 
 # Bundle edge Rails instead:
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
 
-gem 'pg', '0.12.2'
+gem 'pg'
 
-gem 'jquery-rails'
-gem 'nokogiri-happymapper'
-gem 'aws-sdk'
+# Gems used only for assets and not required
+# in production environments by default.
+group :assets do
+  gem 'sass-rails',   '~> 3.2.3'
+  gem 'coffee-rails', '~> 3.2.1'
+
+  # See https://github.com/sstephenson/execjs#readme for more supported runtimes
+  # gem 'therubyracer', :platforms => :ruby
+
+  gem 'uglifier', '>= 1.0.3'
+end
+
+# gem 'jquery-rails'
 
 # To use ActiveModel has_secure_password
 # gem 'bcrypt-ruby', '~> 3.0.0'
@@ -28,24 +35,14 @@ gem 'aws-sdk'
 
 # To use debugger
 # gem 'debugger'
-gem 'spree', '1.1.5'
-gem 'spree_usa_epay'
-gem 'spree_skrill'
-gem 'spree_i18n', :git => 'git://github.com/spree/spree_i18n.git'
 
-# Gems used only for assets and not required
-# in production environments by default.
-group :assets do
-	gem 'sass-rails',   '~> 3.2.3'
-	gem 'coffee-rails', '~> 3.2.1'
+gem 'synergy', :git => 'git://github.com/secoint/synergy.git', :branch => '1-3-x'
+gem 'spree_auth_devise', :git => 'git://github.com/spree/spree_auth_devise', :branch => '1-3-stable'
+gem 'spree_i18n', :git => 'git://github.com/secoint/spree_i18n.git', :branch => '1-3-stable'
+gem 'spree_static_content', :git => 'git://github.com/spree/spree_static_content.git', :branch => '1-3-stable'
+gem 'spree_editor', :git => 'git://github.com/secoint/spree_editor.git'
+gem 'spree_online_support', :git => 'git://github.com/secoint/spree_online_support.git'
+gem 'spree_address_book', :git => 'git://github.com/romul/spree_address_book.git'
 
-	# See https://github.com/sstephenson/execjs#readme for more supported runtimes
-	# gem 'therubyracer', :platforms => :ruby
-
-	gem 'uglifier', '>= 1.0.3'
-end
-
-group :development do
-	gem 'better_errors'
-	gem 'binding_of_caller'
-end
+gem 'nokogiri-happymapper'
+gem 'aws-sdk'

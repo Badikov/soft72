@@ -1,4 +1,6 @@
-Soft72Local::Application.routes.draw do
+Soft72::Application.routes.draw do
+
+  mount Ckeditor::Engine => '/ckeditor'
 
   # This line mounts Spree's routes at the root of your application.
   # This means, any requests to URLs such as /products, will go to Spree::ProductsController.
@@ -6,14 +8,7 @@ Soft72Local::Application.routes.draw do
   #
   # We ask that you don't use the :as option here, as Spree relies on it being the default of "spree"
   mount Spree::Core::Engine, :at => '/'
-        
-  # This line mounts Spree's routes at the root of your application.
-  # This means, any requests to URLs such as /products, will go to Spree::ProductsController.
-  # If you would like to change where this engine is mounted, simply change the :at option to something different.
-  #
-  # We ask that you don't use the :as option here, as Spree relies on it being the default of "spree"
-  mount Spree::Core::Engine, :at => '/'
-  # The priority is based upon order of creation:
+          # The priority is based upon order of creation:
   # first created -> highest priority.
 
   # Sample of regular route:
@@ -70,10 +65,9 @@ Soft72Local::Application.routes.draw do
   # Note: This route will make all actions in every controller accessible via GET requests.
   # match ':controller(/:action(/:id))(.:format)'
 
-  Spree::Core::Engine.routes.prepend do
-  	namespace :admin do
+	Spree::Core::Engine.routes.prepend do
+		namespace :admin do
 			match 'pimport/:action', :to => 'pimport', :as => :pimport
-  	end
+		end
 	end
-
 end

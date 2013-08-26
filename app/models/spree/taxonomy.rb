@@ -5,20 +5,22 @@ module Spree
 		attr_accessible :name
 
 		has_many :taxons
-		has_one :root, :conditions => { :parent_id => nil }, :class_name => 'Spree::Taxon',
+		has_one :root, :conditions => { :parent_id => nil }, :class_name => "Spree::Taxon",
 						:dependent => :destroy
 
 		after_save :set_name
 
+		default_scope :order => "#{self.table_name}.position"
+
 		private
-		def set_name
-			if root
-				root.update_column(:name, name)
-			else
-				# Added :id to match allsoft's database
-				self.root = Taxon.create!({ :id => id, :taxonomy_id => id, :name => name }, :without_protection => true)
+			def set_name
+				if root
+					root.update_column(:name, name)
+				else
+					# Added :id to match allsoft's database
+					self.root = Taxon.create!({:id => id, :taxonomy_id => id, :name => name}, :without_protection => true)
+				end
 			end
-		end
 
 	end
 end

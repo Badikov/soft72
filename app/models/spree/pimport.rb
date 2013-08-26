@@ -15,7 +15,6 @@ module Spree
 
 		def parse_db(obj)
 			require "pimport/allsoft"
-
 			shop = Shop.parse(obj.read, single: true)
 
 			# Making taxonomy

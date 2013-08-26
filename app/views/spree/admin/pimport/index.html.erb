@@ -1,8 +1,14 @@
-<h1><%= t('pimport') %></h1>
+<% content_for :page_title do %>
+	<%= t('pimport') %>
+<% end %>
 
 <%= form_tag({ action: :upload }, multipart: true) do %>
-	<%= file_field_tag 'pimport_file' %>
-	<p class="form-buttons" data-hook="buttons">
-		<%= button t(:upload), '16x16/10', 'submit', { confirm: t(:cleardb_confirm) } %>
-	</p>
+	<fieldset data-hook="new_pimport">
+		<legend align="center"><%= t(:new_pimport) %></legend>
+		<%= label_tag t(:filename) %><br>
+		<%= file_field_tag 'pimport_file' %>
+		<div class="form-buttons filter-actions actions" data-hook="buttons">
+			<%= button t(:upload), 'icon-upload', 'submit', { confirm: t(:cleardb_confirm) } %>
+		</div>
+	</fieldset>
 <% end %>

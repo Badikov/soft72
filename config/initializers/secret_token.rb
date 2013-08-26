@@ -4,4 +4,4 @@
 # If you change this key, all old signed cookies will become invalid!
 # Make sure the secret is at least 30 characters and all random,
 # no regular words or you'll be exposed to dictionary attacks.
-Soft72Local::Application.config.secret_token = 'cc3b42db5c020dfc43a923a23c51acf783ba3558cbf391e0210e3da70ba4b1fb24f4c0c4d8dd1cae95531cf4d7d7b413b5213ba0e4c3a55a721083d462202560'
+Soft72::Application.config.secret_token = 'ac243a918107f86a3bc0cd4c8117d6b59c29096dde01ac21c69c981b8f134d191e7b29112016a0cf1e772185b821f91488832d062cb7ab8806ae317b705984f8'

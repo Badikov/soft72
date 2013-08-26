@@ -9,7 +9,7 @@ if defined?(Bundler)
   # Bundler.require(:default, :assets, Rails.env)
 end
 
-module Soft72Local
+module Soft72
   class Application < Rails::Application
     
     config.to_prepare do
@@ -71,7 +71,5 @@ module Soft72Local
 
     # Version of your assets, change this if you want to expire all your assets
     config.assets.version = '1.0'
-
-		Paperclip.options[:command_path] = '/opt/ImageMagick/bin/'
   end
 end

@@ -2,6 +2,6 @@
 require File.expand_path('../application', __FILE__)
 
 # Initialize the rails application
-Soft72Local::Application.initialize!
+Soft72::Application.initialize!
 
 ActiveRecord::Base.include_root_in_json = true
