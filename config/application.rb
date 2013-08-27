@@ -69,7 +69,7 @@ module Soft72
     # Enable the asset pipeline
     config.assets.enabled = true
 
-		config.assets.paths << "/assets/font"
+		config.assets.paths << "#{Rails.root}/app/assets/font"
 
     # Version of your assets, change this if you want to expire all your assets
     config.assets.version = '1.0'
