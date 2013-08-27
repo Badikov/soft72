@@ -1,2 +1,2 @@
 Интернет-магазин "Компонента"
-Rails 3.2.7 + Spree
+Rails 3.2.12 + Synergy Spree

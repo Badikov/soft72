@@ -10,6 +10,7 @@ Spree.config do |config|
   # Uncomment to override the default site name.
   # config.site_name = "Spree Demo Site"
 	config.logo = "logo.png"
+	config.site_url = "www.soft72.biz"
 end
 
 Spree.user_class = "Spree::User"
