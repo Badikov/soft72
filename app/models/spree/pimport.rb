@@ -3,19 +3,19 @@ module Spree
 		include AbstractController::Translation
 
 
-		def initialize(obj)
+		def initialize(catalog_xml)
 			Taxonomy.delete_all
 			Taxon.delete_all
 			Product.delete_all
 			Variant.delete_all
 			OptionType.delete_all
 			OptionValue.delete_all
-			parse_db(obj)
+			parse_db(catalog_xml)
 		end
 
-		def parse_db(obj)
+		def parse_db(catalog_xml)
 			require "pimport/allsoft"
-			shop = Shop.parse(obj.read, single: true)
+			shop = Shop.parse(catalog_xml.read, single: true)
 
 			# Making taxonomy
 			taxons = {}
@@ -33,7 +33,7 @@ module Spree
 					)
 				end
 			end
-
+=begin
 			option_type = OptionType.new(
 					name: 'version',
 					presentation: t(:version)
@@ -102,6 +102,7 @@ module Spree
 					#p.images << image if image.save
 				end
 			end
+=end
 		end
 
 	end

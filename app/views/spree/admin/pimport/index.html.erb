@@ -2,11 +2,11 @@
 	<%= t('pimport') %>
 <% end %>
 
-<%= form_tag({ action: :upload }, multipart: true) do %>
+<%= form_tag({ action: :index }, multipart: true) do %>
 	<fieldset data-hook="new_pimport">
 		<legend align="center"><%= t(:new_pimport) %></legend>
 		<%= label_tag t(:filename) %><br>
-		<%= file_field_tag 'pimport_file' %>
+		<%= file_field_tag 'catalog_file' %>
 		<div class="form-buttons filter-actions actions" data-hook="buttons">
 			<%= button t(:upload), 'icon-upload', 'submit', { confirm: t(:cleardb_confirm) } %>
 		</div>
