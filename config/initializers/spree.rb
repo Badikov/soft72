@@ -11,6 +11,10 @@ Spree.config do |config|
   # config.site_name = "Spree Demo Site"
 	config.logo = "logo.png"
 	config.site_url = "www.soft72.biz"
+	config.max_level_in_taxons_menu = 2
 end
 
 Spree.user_class = "Spree::User"
+
+# Product filters /lib/spree/product_filters.rb
+require 'spree/product_filters'

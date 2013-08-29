@@ -10,17 +10,18 @@ module Spree
 			Variant.delete_all
 			OptionType.delete_all
 			OptionValue.delete_all
+			ActiveRecord::Base.connection.execute('DELETE FROM "spree_option_values_variants"')
 			parse_db(catalog_xml)
 		end
 
 		def parse_db(catalog_xml)
 			require "pimport/allsoft"
 			shop = Shop.parse(catalog_xml.read, single: true)
-
-			# Making taxonomy
+			# Making taxonomy tree
 			taxons = {}
 			shop.categories.each do |category|
 				if category.parent_id == 0
+					category.parent_id = nil
 					taxonomy = Taxonomy.create(
 							name: category.name
 					)
@@ -29,67 +30,66 @@ module Spree
 					taxons[category.id] = Taxon.create(
 							name: category.name,
 							parent_id: taxons[category.parent_id].id,
-							taxonomy_id: taxons[category.parent_id].id
+							taxonomy_id: taxons[category.parent_id].parent_id
 					)
 				end
 			end
-=begin
+			# Making option type
 			option_type = OptionType.new(
 					name: 'version',
 					presentation: t(:version)
 			)
 			option_type.save
-
-			# Programs
+			# Parsing programs
 			shop.programs.each do |program|
-
-				# Make Taxon if more than 1 Variants
-				if program.versions.size > 1
-					program_taxons = Taxon.create(
-							name: program.name,
-							parent_id: taxons[program.category_id].id,
-							taxonomy_id: taxons[program.category_id].id
-					)
-				end
-
+				# Make program taxon
+				program_taxon = Taxon.create(
+						name: program.name,
+						parent_id: taxons[program.category_id].id,
+						taxonomy_id: taxons[program.category_id].parent_id
+				)
+				#taxons[program.category_id][program.id] = program_taxon
+				# Parsing versions
 				program.versions.each do |version|
 					p = Product.create(
 							name: version.fullname,
 							price: version.prices[0].value.to_f,
 							available_on: Time.now
 					)
-					if p.taxons.where(
-							name: program.name,
-							parent_id: taxons[program.category_id].id,
-							taxonomy_id: taxons[program.category_id].id
-					).empty?
-						p.taxons << Taxon.new(
-								name: program.name,
-								parent_id: taxons[program.category_id].id,
-								taxonomy_id: taxons[program.category_id].id
-						)
-					end
-					version.prices.each do |variant|
-						v = Variant.create(
-								product_id: p.id,
-								price: variant.value.to_f
-						)
-						unless variant.name.nil?
-							option_value = OptionValue.new(
-									name: variant.name.to_url,
-									presentation: variant.name
-							)
-							option_value.option_type = option_type
-							option_value.save
-							if v.option_values.where(
-									name: variant.name.to_url,
-									presentation: variant.name
-							).empty?
-								v.option_values << option_value
-							end
-						end
-					end
-
+					p.taxons << program_taxon
+					#if p.taxons.where(
+					#		name: version.fullname,
+					#		parent_id: taxons[program.category_id].id,
+					#		taxonomy_id: taxons[program.category_id].parent_id
+					#).empty?
+					#	p.taxons << Taxon.create(
+					#			name: version.fullname,
+					#			parent_id: taxons[program.category_id].id,
+					#			taxonomy_id: taxons[program.category_id].parent_id
+					#	)
+					#end
+					# Parsing prices
+					#version.prices.each do |variant|
+					#	v = Variant.create(
+					#			product_id: p.id,
+					#			price: variant.value.to_f
+					#	)
+					#	unless variant.name.nil?
+					#		option_value = OptionValue.new(
+					#				name: variant.name.to_url,
+					#				presentation: variant.name
+					#		)
+					#		option_value.option_type = option_type
+					#		option_value.save
+					#		if v.option_values.where(
+					#				name: variant.name.to_url,
+					#				presentation: variant.name
+					#		).empty?
+					#			v.option_values << option_value
+					#		end
+					#	end
+					#end
+					# Parsing images
 					#image_file = open(program.image)
 					#def
 					#image_file.original_filename
@@ -102,8 +102,9 @@ module Spree
 					#p.images << image if image.save
 				end
 			end
-=end
+
 		end
+
 
 	end
 end
