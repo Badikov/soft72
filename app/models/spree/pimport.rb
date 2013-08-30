@@ -48,7 +48,6 @@ module Spree
 						parent_id: taxons[program.category_id].id,
 						taxonomy_id: taxons[program.category_id].parent_id
 				)
-				#taxons[program.category_id][program.id] = program_taxon
 				# Parsing versions
 				program.versions.each do |version|
 					p = Product.create(
@@ -57,49 +56,38 @@ module Spree
 							available_on: Time.now
 					)
 					p.taxons << program_taxon
-					#if p.taxons.where(
-					#		name: version.fullname,
-					#		parent_id: taxons[program.category_id].id,
-					#		taxonomy_id: taxons[program.category_id].parent_id
-					#).empty?
-					#	p.taxons << Taxon.create(
-					#			name: version.fullname,
-					#			parent_id: taxons[program.category_id].id,
-					#			taxonomy_id: taxons[program.category_id].parent_id
-					#	)
-					#end
 					# Parsing prices
-					#version.prices.each do |variant|
-					#	v = Variant.create(
-					#			product_id: p.id,
-					#			price: variant.value.to_f
-					#	)
-					#	unless variant.name.nil?
-					#		option_value = OptionValue.new(
-					#				name: variant.name.to_url,
-					#				presentation: variant.name
-					#		)
-					#		option_value.option_type = option_type
-					#		option_value.save
-					#		if v.option_values.where(
-					#				name: variant.name.to_url,
-					#				presentation: variant.name
-					#		).empty?
-					#			v.option_values << option_value
-					#		end
-					#	end
-					#end
+					version.prices.each do |variant|
+						v = Variant.create(
+								product_id: p.id,
+								price: variant.value.to_f
+						)
+						unless variant.name.nil?
+							option_value = OptionValue.new(
+									name: variant.name.to_url,
+									presentation: variant.name
+							)
+							option_value.option_type = option_type
+							option_value.save
+							if v.option_values.where(
+									name: variant.name.to_url,
+									presentation: variant.name
+							).empty?
+								v.option_values << option_value
+							end
+						end
+					end
 					# Parsing images
-					#image_file = open(program.image)
-					#def
-					#image_file.original_filename
-					#	base_uri.path.split('/').last
-					#end
-					#image = Image.find_or_initialize_by_attachment_file_name(image_file.original_filename)
-					#image.attachment = image_file
-					#image.viewable = p
-					#@image = image
-					#p.images << image if image.save
+					image_file = open(program.image)
+					def
+					image_file.original_filename
+						base_uri.path.split('/').last
+					end
+					image = Image.find_or_initialize_by_attachment_file_name(image_file.original_filename)
+					image.attachment = image_file
+					image.viewable = p
+					@image = image
+					p.images << image if image.save
 				end
 			end
 
