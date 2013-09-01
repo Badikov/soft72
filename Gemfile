@@ -4,6 +4,7 @@ ruby '1.9.3'
 gem 'rails', '3.2.12'
 
 group :production do
+	gem 'unicorn'
 	gem 'newrelic_rpm'
 end
 
@@ -11,8 +12,6 @@ end
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
 
 gem 'pg'
-
-gem 'unicorn'
 
 # Gems used only for assets and not required
 # in production environments by default.
@@ -27,6 +26,7 @@ group :assets do
 end
 
 group :development do
+	gem 'thin'
 	gem 'better_errors'
 	gem "binding_of_caller"
 end

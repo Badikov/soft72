@@ -10,6 +10,7 @@ module Spree
 			Variant.delete_all
 			OptionType.delete_all
 			OptionValue.delete_all
+			Asset.delete_all
 			ActiveRecord::Base.connection.execute('DELETE FROM "spree_option_values_variants"')
 			parse_db(catalog_xml)
 		end
@@ -55,6 +56,12 @@ module Spree
 							price: version.prices[0].value.to_f,
 							available_on: Time.now
 					)
+					if program.image
+						ImageFromUrl.create(
+								attachment_file_name: program.image,
+								viewable: p.master
+						)
+					end
 					p.taxons << program_taxon
 					# Parsing prices
 					version.prices.each do |variant|
@@ -62,6 +69,12 @@ module Spree
 								product_id: p.id,
 								price: variant.value.to_f
 						)
+						if version.image
+							ImageFromUrl.create(
+									attachment_file_name: version.image,
+									viewable: v
+							)
+						end
 						unless variant.name.nil?
 							option_value = OptionValue.new(
 									name: variant.name.to_url,
