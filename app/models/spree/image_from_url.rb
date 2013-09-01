@@ -4,7 +4,7 @@ module Spree
     #validate :no_attachment_errors
 
     #attr_accessible :alt, :attachment, :position, :viewable_type, :viewable_id
-		attr_accessible :alt, :attachment_file_name, :viewable
+		attr_accessible :alt, :attachment_file_name, :viewable, :type
 
     #has_attached_file :attachment,
     #                  :styles => { :mini => '48x48>', :small => '100x100>', :product => '240x240>', :large => '600x600>' },

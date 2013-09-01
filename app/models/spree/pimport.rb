@@ -51,15 +51,17 @@ module Spree
 				)
 				# Parsing versions
 				program.versions.each do |version|
+					price = version.prices.empty? ? 0 : version.prices[0].value.to_f
 					p = Product.create(
 							name: version.fullname,
-							price: version.prices[0].value.to_f,
+							price: price,
 							available_on: Time.now
 					)
 					if program.image
 						ImageFromUrl.create(
 								attachment_file_name: program.image,
-								viewable: p.master
+								viewable: p.master,
+								type: 'Spree::Image'
 						)
 					end
 					p.taxons << program_taxon
@@ -72,7 +74,8 @@ module Spree
 						if version.image
 							ImageFromUrl.create(
 									attachment_file_name: version.image,
-									viewable: v
+									viewable: v,
+									type: 'Spree::Image'
 							)
 						end
 						unless variant.name.nil?
