@@ -12,3 +12,6 @@
 
 //= require_tree .
 //= require store/spree_address_book
+
+//= require jquery.treeview
+//= require jquery.cookie
